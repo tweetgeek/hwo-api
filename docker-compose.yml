@@ -27,6 +27,13 @@ services:
             - redis
             - mailhog
             - selenium
+    localtunnel:
+        image: efrecon/localtunnel
+        networks:
+            - sail
+        links:
+            - laravel.test
+        command: "--local-host laravel.test --port 80 --subdomain tweetgeek-mobile-app"
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
