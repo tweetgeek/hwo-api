@@ -3,7 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -43,4 +48,54 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $appends = [
+        'has_onboarding'
+    ];
+
+    public function getHasOnboardingAttribute()
+    {
+        return false;
+    }
+
+    public function garbageCollections(): HasMany
+    {
+        return $this->hasMany(GarbageCollection::class);
+    }
+
+    public function garbageTypes(): HasMany
+    {
+        return $this->hasMany(GarbageType::class);
+    }
+
+    public function devices(): HasMany
+    {
+        return $this->hasMany(UserDevice::class);
+    }
+
+    protected static function newFactory(): Factory
+    {
+        return UserFactory::new();
+    }
+
+    public function authorizeDevice(array $device): Model
+    {
+        if ($device['type'] === 'web') {
+            return new UserDevice($device);
+        }
+
+        return $this->devices()->updateOrCreate([
+            UserDevice::FIELD_TYPE => $device['type'],
+            UserDevice::FIELD_BRAND => $device['brand'],
+            UserDevice::FIELD_MANUFACTURER => $device['manufacturer'],
+            UserDevice::FIELD_MODEL_NAME => $device['modelName'],
+            UserDevice::FIELD_MODEL_ID => $device['modelId'],
+            UserDevice::FIELD_OS_NAME => $device['osName'],
+            UserDevice::FIELD_OS_VERSION => $device['osVersion'],
+            UserDevice::FIELD_OS_BUILD_ID => $device['osBuildId'],
+            UserDevice::FIELD_DEVICE_NAME => $device['deviceName'],
+        ], [
+            UserDevice::FIELD_LAST_SEEN => Carbon::now(),
+        ]);
+    }
 }
