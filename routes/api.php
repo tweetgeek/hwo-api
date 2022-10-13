@@ -2,8 +2,13 @@
 
 use App\Http\Controllers\Api\Auth\AuthenticateController;
 use App\Http\Controllers\Api\GarbageScheduleController;
+use App\Http\Controllers\Api\GarbageSchedulesController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/ping', function () {
+    return response()->json(['status' => 'ok']);
+});
 
 Route::group(['prefix' => '/auth'], static function () {
 //    Route::post('/register', [RegisteredUserController::class, 'store'])
@@ -41,6 +46,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::group(['prefix' => '/schedules'], static function () {
+        Route::get('', [GarbageSchedulesController::class, 'index']);
+//        Route::post('/.filter', [GarbageScheduleController::class, 'filter']);
+//        Route::post('', [GarbageScheduleController::class, 'store']);
+//        Route::get('/:id', [GarbageScheduleController::class, 'show']);
+//        Route::patch('', [GarbageScheduleController::class, 'update']);
+//        Route::delete('', [GarbageScheduleController::class, 'destroy']);
+    });
+
+
+    Route::group(['prefix' => '/schedule'], static function () {
         Route::get('', [GarbageScheduleController::class, 'index']);
 //        Route::post('/.filter', [GarbageScheduleController::class, 'filter']);
 //        Route::post('', [GarbageScheduleController::class, 'store']);

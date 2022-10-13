@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -53,20 +54,32 @@ class User extends Authenticatable
         'has_onboarding'
     ];
 
-    public function getHasOnboardingAttribute()
+    public function getHasOnboardingAttribute(): bool
     {
         return false;
     }
 
-    public function garbageCollections(): HasMany
+    public function garbageSchedules(): HasManyThrough
     {
-        return $this->hasMany(GarbageCollection::class);
+        return $this->hasManyThrough(
+            GarbageSchedule::class,
+            UserGarbageSchedule::class,
+            'garbage_schedule_id',
+            'id',
+            'id',
+            'id'
+        )->orderBy('updated_at', 'desc');
     }
 
-    public function garbageTypes(): HasMany
-    {
-        return $this->hasMany(GarbageType::class);
-    }
+//    public function garbageCollections(): HasMany
+//    {
+//        return $this->hasMany(GarbageCollection::class);
+//    }
+//
+//    public function garbageTypes(): HasMany
+//    {
+//        return $this->hasMany(GarbageType::class);
+//    }
 
     public function devices(): HasMany
     {

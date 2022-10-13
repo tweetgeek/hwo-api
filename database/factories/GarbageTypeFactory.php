@@ -19,6 +19,7 @@ class GarbageTypeFactory extends Factory
     {
         return [
             'name' => fake()->word(),
+            'color' => fake()->hexColor(),
             'user_id' => null,
         ];
     }

@@ -12,6 +12,7 @@ return new class () extends Migration {
             $table->foreignId('user_id')->nullable()->constrained();
             $table->string('name')->nullable(false);
             $table->string('icon')->nullable();
+            $table->string('color')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

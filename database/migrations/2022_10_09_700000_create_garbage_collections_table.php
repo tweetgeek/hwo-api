@@ -9,9 +9,9 @@ return new class () extends Migration {
     {
         Schema::create('garbage_collections', function (Blueprint $table) {
             $table->id();
-            $table->date('date')->nullable(false);
             $table->foreignId('garbage_schedule_id')->constrained();
             $table->foreignId('garbage_type_id')->constrained();
+            $table->date('date')->nullable(false);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
 
             GarbageScheduleSeeder::class,
             GarbageTypeSeeder::class,
+            GarbageSeeder::class,
+
 //            GarbageCollectionsSeeder::class,
         ]);
     }

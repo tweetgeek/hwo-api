@@ -11,7 +11,6 @@ return new class () extends Migration {
             $table->id();
             $table->string('name')->nullable(false);
             $table->string('code')->unique()->nullable(false);
-            $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

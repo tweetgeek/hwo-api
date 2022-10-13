@@ -11,7 +11,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         if (config('app.env') === 'local') {
-            User::factory()->create(['email' => 'user@testuser.pl', 'password' => Hash::make('fiat126IsAwes0m3')]);
+            User::factory()->create(['name' => 'John Doe', 'email' => 'user@testuser.pl', 'password' => Hash::make('fiat126IsAwes0m3')]);
         }
 
         User::factory()
