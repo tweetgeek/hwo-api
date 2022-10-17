@@ -37,4 +37,13 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+    /**
+     * Indicate that the model's email address should be unverified.
+     *
+     * @return static
+     */
+    public function withNotificationsSettings()
+    {
+        return $this->createNotificationSetting();
+    }
 }

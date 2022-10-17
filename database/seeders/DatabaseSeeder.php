@@ -16,13 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-//            UserDeviceSeeder::class,
 
             GarbageScheduleSeeder::class,
             GarbageTypeSeeder::class,
             GarbageSeeder::class,
-
-//            GarbageCollectionsSeeder::class,
         ]);
     }
 }

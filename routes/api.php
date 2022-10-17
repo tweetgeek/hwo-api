@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\Auth\AuthenticateController;
 use App\Http\Controllers\Api\GarbageScheduleController;
 use App\Http\Controllers\Api\GarbageSchedulesController;
+use App\Http\Controllers\Api\GarbageTypeController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserNotificationSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/ping', function () {
@@ -41,9 +43,13 @@ Route::group(['prefix' => '/auth'], static function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::group(['prefix' => '/user'], static function () {
-        Route::get('', [UserController::class, 'index']);
-    });
+    Route::get('/user', [UserController::class, 'index']);
+
+    Route::get('/user_notification_settings', [UserNotificationSettingsController::class, 'index']);
+    Route::post('/user_notification_settings', [UserNotificationSettingsController::class, 'post']);
+
+    Route::get('/garbage_types', [GarbageTypeController::class, 'index']);
+
 
     Route::group(['prefix' => '/schedules'], static function () {
         Route::get('', [GarbageSchedulesController::class, 'index']);

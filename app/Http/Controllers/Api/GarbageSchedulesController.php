@@ -15,9 +15,9 @@ class GarbageSchedulesController extends ApiController
     {
         /** @var User $user */
         $user = \Auth::user();
-        $schedules = GarbageSchedule::whereNull('user_id')->orWhere('user_id', $user->id)->get();
+        $schedules = $user->garbageSchedules()->get();
 
-        return response()->json(['data' => $schedules]);
+        return response()->json($schedules);
     }
 
     public function store(GarbageScheduleStoreRequest $request): JsonResponse

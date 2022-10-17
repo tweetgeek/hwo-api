@@ -71,15 +71,16 @@ class User extends Authenticatable
         )->orderBy('updated_at', 'desc');
     }
 
-//    public function garbageCollections(): HasMany
-//    {
-//        return $this->hasMany(GarbageCollection::class);
-//    }
-//
-//    public function garbageTypes(): HasMany
-//    {
-//        return $this->hasMany(GarbageType::class);
-//    }
+    public function garbageTypes()
+    {
+        return $this->hasMany(GarbageType::class);
+    }
+
+    public function notificationSetting()
+    {
+        return $this->hasOne(UserNotificationSetting::class);
+    }
+
 
     public function devices(): HasMany
     {
@@ -110,5 +111,10 @@ class User extends Authenticatable
         ], [
             UserDevice::FIELD_LAST_SEEN => Carbon::now(),
         ]);
+    }
+
+    public function createNotificationSetting()
+    {
+        return $this->notificationSetting()->create();
     }
 }
