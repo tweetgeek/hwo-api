@@ -2,20 +2,32 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\VerifyUser;
 use Carbon\Carbon;
 use Database\Factories\UserFactory;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Model implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
 {
+    use Authenticatable;
+    use Authorizable;
+    use CanResetPassword;
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
@@ -47,16 +59,21 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'verified_at' => 'datetime',
     ];
 
     protected $appends = [
-        'has_onboarding'
+        'has_welcome_onboarding'
     ];
 
-    public function getHasOnboardingAttribute(): bool
+    public function userVerificationCode(): HasOne
     {
-        return false;
+        return $this->hasOne(UserVerificationCode::class);
+    }
+
+    public function userOnboarding(): HasOne
+    {
+        return $this->hasOne(UserOnboarding::class);
     }
 
     public function garbageSchedules(): HasManyThrough
@@ -71,16 +88,10 @@ class User extends Authenticatable
         )->orderBy('updated_at', 'desc');
     }
 
-    public function garbageTypes()
-    {
-        return $this->hasMany(GarbageType::class);
-    }
-
-    public function notificationSetting()
+    public function userNotificationSetting(): HasOne
     {
         return $this->hasOne(UserNotificationSetting::class);
     }
-
 
     public function devices(): HasMany
     {
@@ -90,6 +101,11 @@ class User extends Authenticatable
     protected static function newFactory(): Factory
     {
         return UserFactory::new();
+    }
+
+    public function getHasWelcomeOnboardingAttribute(): bool
+    {
+        return $this->userOnboarding()->where('name', 'welcome')->exists();
     }
 
     public function authorizeDevice(array $device): Model
@@ -113,8 +129,35 @@ class User extends Authenticatable
         ]);
     }
 
-    public function createNotificationSetting()
+    public function createNotificationSetting(): Model
     {
         return $this->notificationSetting()->create();
+    }
+
+    public function isVerified(): bool
+    {
+        return !is_null($this->verified_at);
+    }
+
+    public function markAsVerified(): bool
+    {
+        return $this->forceFill([
+            'verified_at' => $this->freshTimestamp(),
+        ])->save();
+    }
+
+    public function sendVerificationCodeNotification(): void
+    {
+        $this->notify(new VerifyUser());
+    }
+
+    public function getEmailForVerificationCode(): string
+    {
+        return $this->email;
+    }
+
+    public function getVerificationCode(): string
+    {
+        return $this->userVerificationCode->code;
     }
 }

@@ -3,32 +3,37 @@
 namespace App\Contracts\Api;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 
 interface Controller
 {
-    public function index(): JsonResponse;
+    /**
+     * GET    Retrieve information about the REST API resource
+     * @param mixed $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function get($request, $id): JsonResponse;
 
     /**
+     * POST    Create a REST API resource
      * @param mixed $request
      * @return JsonResponse
      */
-    public function filter(mixed $request): JsonResponse;
+    public function post($request): JsonResponse;
 
     /**
+     * PUT    Update a REST API resource
      * @param mixed $request
+     * @param int $id
      * @return JsonResponse
      */
-    public function store(mixed $request): JsonResponse;
-
-    public function show($id): JsonResponse;
+    public function put($request, $id): JsonResponse;
 
     /**
+     * DELETE    Delete a REST API resource or related component
      * @param mixed $request
-     * @param $id
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function update($request, $id): Response;
-
-    public function destroy($id): Response;
+    public function delete($request, $id): JsonResponse;
 }

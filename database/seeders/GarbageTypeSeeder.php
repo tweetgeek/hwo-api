@@ -10,18 +10,18 @@ class GarbageTypeSeeder extends Seeder
     public function run(): void
     {
         collect([
-            ['name' => 'Zmieszane odpady komunalne', 'icon' => 'trash-o', 'color' => '#404040'],
-            ['name' => 'Papier', 'icon' => 'newspaper-o', 'color' => '#0284c7'],
-            ['name' => 'Metale i tworzywa sztuczne', 'icon' => 'rocket', 'color' => '#facc15'],
-            ['name' => 'Szkło', 'icon' => 'wine-glass', 'color' => '#16a34a'],
-            ['name' => 'Bioodpady', 'icon' => 'biohazard', 'color' => '#92400e'],
-            ['name' => 'Odpady wystawkowe', 'icon' => 'tv', 'color' => '#9ca3af'],
+            ['id' => 1, 'name' => 'Zmieszane odpady komunalne', 'icon' => 'recykling', 'color' => '#404040'],
+            ['id' => 2, 'name' => 'Papier', 'icon' => 'papier', 'color' => '#0284c7'],
+            ['id' => 3, 'name' => 'Metale i tworzywa sztuczne', 'icon' => 'metal', 'color' => '#facc15'],
+            ['id' => 4, 'name' => 'Plastiki', 'icon' => 'plastik', 'color' => '#facc15'],
+            ['id' => 5, 'name' => 'Szkło', 'icon' => 'szklo', 'color' => '#16a34a'],
+            ['id' => 6, 'name' => 'Bioodpady', 'icon' => 'bio', 'color' => '#92400e'],
+            ['id' => 7, 'name' => 'Odpady wystawkowe', 'icon' => 'gabaryty', 'color' => '#9ca3af'],
+            ['id' => 8, 'name' => 'Elektronika', 'icon' => 'elektronika', 'color' => '#fff'],
+            ['id' => 9, 'name' => 'Baterie', 'icon' => 'baterie', 'color' => '#fff'],
+            ['id' => 10, 'name' => 'Odpady zielone', 'icon' => 'ogrodowe', 'color' => '#fff'],
         ])->each(function ($item) {
             return GarbageType::factory()->create($item);
         });
-
-//        User::all()->each(function (User $user) {
-//            GarbageType::factory()->state(fn () => ['user_id' => $user->id])->create(['name' => 'Type of user #' . $user->id]);
-//        });
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 
 class GarbageScheduleController extends ApiController
 {
-    public function index(): JsonResponse
+    public function get(): JsonResponse
     {
         /** @var User $user */
         $user = \Auth::user();

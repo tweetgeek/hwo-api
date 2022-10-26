@@ -9,12 +9,10 @@ return new class () extends Migration {
     {
         Schema::create('garbage_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained();
             $table->string('name')->nullable(false);
             $table->string('icon')->nullable();
             $table->string('color')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

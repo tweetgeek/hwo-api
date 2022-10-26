@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class UserController extends ApiController
 {
-    public function index(Request $request): JsonResponse
+    public function get(Request $request): JsonResponse
     {
         return response()->json($request->user());
     }

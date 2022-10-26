@@ -1,15 +1,15 @@
 <?php
+
 // @formatter:off
 
 namespace PHPSTORM_META {
-
-   /**
-    * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    *
-    * @author Barry vd. Heuvel <barryvdh@gmail.com>
-    * @see https://github.com/barryvdh/laravel-ide-helper
-    */
-    override(new \Illuminate\Contracts\Container\Container, map([
+    /**
+     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
+     *
+     * @author Barry vd. Heuvel <barryvdh@gmail.com>
+     * @see https://github.com/barryvdh/laravel-ide-helper
+     */
+    override(new \Illuminate\Contracts\Container\Container(), map([
         '' => '@',
             'Illuminate\Auth\Console\ClearResetsCommand' => \Illuminate\Auth\Console\ClearResetsCommand::class,
             'Illuminate\Auth\Middleware\RequirePassword' => \Illuminate\Auth\Middleware\RequirePassword::class,
@@ -174,6 +174,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -364,6 +367,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -554,6 +560,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -744,6 +753,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -934,6 +946,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -1124,6 +1139,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -1314,6 +1332,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -1504,6 +1525,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -1694,6 +1718,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -1884,6 +1911,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -2074,6 +2104,9 @@ namespace PHPSTORM_META {
             'flare.logger' => \Monolog\Logger::class,
             'hash' => \Illuminate\Hashing\HashManager::class,
             'hash.driver' => \Illuminate\Hashing\BcryptHasher::class,
+            'hashids' => \Vinkla\Hashids\HashidsManager::class,
+            'hashids.connection' => \Hashids\Hashids::class,
+            'hashids.factory' => \Vinkla\Hashids\HashidsFactory::class,
             'log' => \Illuminate\Log\LogManager::class,
             'mail.manager' => \Illuminate\Mail\MailManager::class,
             'mailer' => \Illuminate\Mail\Mailer::class,
@@ -2131,5 +2164,4 @@ namespace PHPSTORM_META {
     override(\with(0), type(0));
     override(\tap(0), type(0));
     override(\optional(0), type(0));
-
 }

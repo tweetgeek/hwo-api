@@ -1,16 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Api;
 
 use App\Enums\DeviceType;
+use App\Http\Controllers\Api\Concerns\GeneratesApiResponses;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\VerifyRequest;
 use App\Models\User;
 use App\Models\UserDevice;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -18,7 +25,9 @@ use Illuminate\Validation\ValidationException;
 
 class AuthenticateController extends Controller
 {
-    public function store(LoginRequest $request): JsonResponse
+    use GeneratesApiResponses;
+
+    public function login(LoginRequest $request): JsonResponse
     {
         $this->ensureIsNotRateLimited($request);
 
@@ -37,14 +46,61 @@ class AuthenticateController extends Controller
         /** @var UserDevice $userDevice */
         $userDevice = $user->authorizeDevice($request->validated('device'));
 
-        return response()->json(['token' => $token, 'refresh_token' => '', 'user' => $user, 'device' => $userDevice]);
+        event(new Login('jwt', $user, true));
+
+        return $this->respondOk(['token' => $token, 'user' => $user, 'device' => $userDevice]);
     }
 
-    public function destroy(): Response
+    public function register(RegisterRequest $request): JsonResponse
     {
-        /** @var User $user */
-        $user = Auth::user();
-        $user->currentAccessToken()->delete();
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'verified_at' => null,
+        ]);
+
+        event(new Registered($user));
+
+        $token = $user->createToken($this->prepareTokenName($request))->plainTextToken;
+
+        /** @var UserDevice $userDevice */
+        $userDevice = $user->authorizeDevice($request->validated('device'));
+
+        event(new Login('jwt', $user, true));
+
+        return $this->respondOk(['token' => $token, 'user' => $user, 'device' => $userDevice]);
+    }
+
+    public function verify(VerifyRequest $request): JsonResponse
+    {
+        if (!$request->user()->isVerified()) {
+            $request->user()->markAsVerified();
+            $request->user()->userVerificationCode()->where('code', $request->input('code'))->delete();
+
+            event(new Verified($request->user()));
+        }
+
+        return $this->respondOk();
+    }
+
+
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        return $this->respondOk();
+    }
+
+    public function resetPassword(Request $request): JsonResponse
+    {
+        return $this->respondOk();
+    }
+
+    public function destroy(Request $request): Response
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        event(new Logout('jwt', $request->user()));
+
         return response()->noContent();
     }
 
@@ -71,7 +127,7 @@ class AuthenticateController extends Controller
         return Str::transliterate(Str::lower($request->input('email')) . '|' . $request->ip());
     }
 
-    private function prepareTokenName(LoginRequest $request): string
+    private function prepareTokenName(LoginRequest|RegisterRequest $request): string
     {
         $device = $request->validated('device');
         if ($device['type'] === DeviceType::WEB->value) {

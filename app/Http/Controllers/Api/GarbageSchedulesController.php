@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GarbageSchedulesController extends ApiController
 {
-    public function index(): JsonResponse
+    public function get(): JsonResponse
     {
         /** @var User $user */
         $user = \Auth::user();
