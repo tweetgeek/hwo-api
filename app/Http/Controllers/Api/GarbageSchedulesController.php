@@ -2,43 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\GarbageScheduleStoreRequest;
-use App\Models\GarbageSchedule;
-use App\Models\User;
+use App\Repositories\UserGarbageScheduleRepository;
 use Illuminate\Http\JsonResponse;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Response;
 
 class GarbageSchedulesController extends ApiController
 {
+    public function __construct(protected readonly UserGarbageScheduleRepository $garbageScheduleRepository)
+    {
+    }
+
     public function get(): JsonResponse
     {
-        /** @var User $user */
-        $user = \Auth::user();
-        $schedules = $user->garbageSchedules()->get();
-
-        return response()->json($schedules);
-    }
-
-    public function store(GarbageScheduleStoreRequest $request): JsonResponse
-    {
-        $schedule = new GarbageSchedule();
-        $schedule->name = $request->input('name');
-        $schedule->code = Uuid::uuid4();
-        $schedule->user_id = \Auth::user()->id;
-        $schedule->save();
-
-        return response()->json($schedule);
-    }
-
-    public function show($id): JsonResponse|Response
-    {
-        $schedule = GarbageSchedule::find($id);
-
-        if (!$schedule) {
-            return response()->noContent(Response::HTTP_NOT_FOUND);
-        }
-
-        return response()->json($schedule);
+        return $this->respondOk($this->garbageScheduleRepository->getAll());
     }
 }

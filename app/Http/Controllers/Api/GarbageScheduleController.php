@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
+use App\Http\Requests\GarbageSchedulePostRequest;
+use App\Repositories\UserGarbageScheduleRepository;
 use Illuminate\Http\JsonResponse;
 
 class GarbageScheduleController extends ApiController
 {
+    public function __construct(protected readonly UserGarbageScheduleRepository $garbageScheduleRepository)
+    {
+    }
+
     public function get(): JsonResponse
     {
-        /** @var User $user */
-        $user = \Auth::user();
+        return $this->respondOk($this->garbageScheduleRepository->getFirst());
+    }
 
-        $schedule = $user->garbageSchedules()
-            ->with('availableGarbageCollections')
-            ->with('availableGarbageCollections.garbageType')
-            ->first();
-
-        return response()->json($schedule);
+    public function post(GarbageSchedulePostRequest $request): JsonResponse
+    {
+        return $this->respondOk($this->garbageScheduleRepository->create($request->input('name')));
     }
 }

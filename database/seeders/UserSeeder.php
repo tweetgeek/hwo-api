@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\UserNotificationSetting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,7 +12,8 @@ class UserSeeder extends Seeder
     {
         if (config('app.env') === 'local') {
             User::factory()
-                ->has(UserNotificationSetting::factory())
+                ->withWelcomeOnboarding()
+                ->withScheduleWitchCollections()
                 ->create(['name' => 'John Doe', 'email' => 'user@testuser.pl', 'password' => Hash::make('fiat126IsAwes0m3')]);
         }
     }

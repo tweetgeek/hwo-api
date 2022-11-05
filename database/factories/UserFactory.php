@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\UserGarbageSchedule;
+use App\Models\UserNotificationSetting;
+use App\Models\UserOnboarding;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -36,5 +39,24 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'verified_at' => null,
         ]);
+    }
+
+    public function withWelcomeOnboarding()
+    {
+        return $this
+            ->has(UserOnboarding::factory()->state(fn () => [
+                'name' => 'welcome',
+            ]))
+            ->has(UserNotificationSetting::factory());
+    }
+
+    public function withSchedule()
+    {
+        return $this->has(UserGarbageSchedule::factory());
+    }
+
+    public function withScheduleWitchCollections()
+    {
+        return $this->has(UserGarbageSchedule::factory()->withCollections());
     }
 }

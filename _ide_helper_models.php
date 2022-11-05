@@ -21,17 +21,17 @@ namespace App\Models{
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property string|null $deleted_at
      * @property-read \App\Models\GarbageType $garbageType
-     * @method static \Database\Factories\GarbageCollectionFactory factory(...$parameters)
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection newModelQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection newQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection query()
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection whereCreatedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection whereDate($value)
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection whereDeletedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection whereGarbageScheduleId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection whereGarbageTypeId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection whereId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder|GarbageCollection whereUpdatedAt($value)
+     * @method static \Database\Factories\UserGarbageCollectionFactory factory(...$parameters)
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection newModelQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection newQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection query()
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection whereDate($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection whereDeletedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection whereGarbageScheduleId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection whereGarbageTypeId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder|UserGarbageCollection whereUpdatedAt($value)
      */
     class GarbageCollection extends \Eloquent
     {
@@ -48,9 +48,9 @@ namespace App\Models{
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $deleted_at
-     * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\GarbageCollection[] $availableGarbageCollections
+     * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserGarbageCollection[] $availableGarbageCollections
      * @property-read int|null $available_garbage_collections_count
-     * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\GarbageCollection[] $garbageCollections
+     * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserGarbageCollection[] $garbageCollections
      * @property-read int|null $garbage_collections_count
      * @method static \Database\Factories\GarbageScheduleFactory factory(...$parameters)
      * @method static \Illuminate\Database\Eloquent\Builder|GarbageSchedule newModelQuery()

@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
@@ -76,16 +75,9 @@ class User extends Model implements
         return $this->hasOne(UserOnboarding::class);
     }
 
-    public function garbageSchedules(): HasManyThrough
+    public function userGarbageSchedules(): HasMany
     {
-        return $this->hasManyThrough(
-            GarbageSchedule::class,
-            UserGarbageSchedule::class,
-            'garbage_schedule_id',
-            'id',
-            'id',
-            'id'
-        )->orderBy('updated_at', 'desc');
+        return $this->hasMany(UserGarbageSchedule::class);
     }
 
     public function userNotificationSetting(): HasOne
@@ -93,7 +85,7 @@ class User extends Model implements
         return $this->hasOne(UserNotificationSetting::class);
     }
 
-    public function devices(): HasMany
+    public function userDevices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
     }
@@ -114,7 +106,7 @@ class User extends Model implements
             return new UserDevice($device);
         }
 
-        return $this->devices()->updateOrCreate([
+        return $this->userDevices()->updateOrCreate([
             UserDevice::FIELD_TYPE => $device['type'],
             UserDevice::FIELD_BRAND => $device['brand'],
             UserDevice::FIELD_MANUFACTURER => $device['manufacturer'],

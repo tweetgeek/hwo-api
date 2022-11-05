@@ -15,11 +15,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UserSeeder::class,
-
-            GarbageScheduleSeeder::class,
             GarbageTypeSeeder::class,
-            GarbageSeeder::class,
+
+            UserSeeder::class,
         ]);
     }
 }

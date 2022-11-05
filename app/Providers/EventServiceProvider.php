@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Events\OnboardingCreatedEvent;
 use App\Listeners\SendVerificationCodeToRegisteredUserListener;
 use App\Listeners\UserOnboardingCreatedListener;
+use App\Models\UserGarbageSchedule;
+use App\Observers\UserGarbageScheduleObserver;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Registered;
@@ -28,6 +30,10 @@ class EventServiceProvider extends ServiceProvider
         OnboardingCreatedEvent::class => [
             UserOnboardingCreatedListener::class
         ]
+    ];
+
+    protected $observers = [
+        UserGarbageSchedule::class => [UserGarbageScheduleObserver::class],
     ];
 
     /**

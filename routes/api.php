@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticateController;
+use App\Http\Controllers\Api\GarbageCollectionController;
 use App\Http\Controllers\Api\GarbageScheduleController;
 use App\Http\Controllers\Api\GarbageSchedulesController;
 use App\Http\Controllers\Api\GarbageTypeController;
@@ -53,4 +54,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Schedule
     Route::get('/schedule', [GarbageScheduleController::class, 'get']);
+    Route::post('/schedule', [GarbageScheduleController::class, 'post']);
+
+
+    Route::get('/collections', [GarbageCollectionController::class, 'get']);
 });

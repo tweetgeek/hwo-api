@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class () extends Migration {
     public function up()
     {
-        Schema::create('garbage_schedules', function (Blueprint $table) {
+        Schema::create('user_garbage_schedules', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->string('name')->nullable(false);
             $table->string('code')->unique()->nullable(false);
             $table->timestamps();

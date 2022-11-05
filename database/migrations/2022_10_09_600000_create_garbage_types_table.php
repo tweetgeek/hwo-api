@@ -12,6 +12,7 @@ return new class () extends Migration {
             $table->string('name')->nullable(false);
             $table->string('icon')->nullable();
             $table->string('color')->nullable();
+            $table->boolean('primary')->nullable();
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\UserGarbageCollection;
 use App\Models\UserGarbageSchedule;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,6 +19,13 @@ class UserGarbageScheduleFactory extends Factory
     public function definition(): array
     {
         return [
+            'name' => $this->faker->name,
+            'code' => $this->faker->uuid(),
         ];
+    }
+
+    public function withCollections(int $count = 10)
+    {
+        return $this->has(UserGarbageCollection::factory()->count($count));
     }
 }
