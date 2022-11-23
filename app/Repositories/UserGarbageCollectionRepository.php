@@ -14,6 +14,7 @@ class UserGarbageCollectionRepository
         return UserGarbageCollection::whereHas('userGarbageSchedule', static fn ($query) => $query->where('user_garbage_schedules.user_id', \Auth::user()->id))
             ->with('userGarbageSchedule')
             ->with('garbageType')
+            ->orderBy('date', 'asc')
             ->cursorPaginate(self::ITEMS_PER_PAGE);
     }
 
@@ -23,6 +24,7 @@ class UserGarbageCollectionRepository
             ->with('userGarbageSchedule')
             ->with('garbageType')
             ->where('date', '>=', Carbon::now())
+            ->orderBy('date', 'asc')
             ->cursorPaginate(self::ITEMS_PER_PAGE);
     }
 }

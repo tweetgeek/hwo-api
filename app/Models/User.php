@@ -108,6 +108,7 @@ class User extends Model implements
 
         return $this->userDevices()->updateOrCreate([
             UserDevice::FIELD_TYPE => $device['type'],
+            UserDevice::FIELD_PUSH_TOKEN => $device['pushToken'] ?? null,
             UserDevice::FIELD_BRAND => $device['brand'],
             UserDevice::FIELD_MANUFACTURER => $device['manufacturer'],
             UserDevice::FIELD_MODEL_NAME => $device['modelName'],
@@ -151,5 +152,10 @@ class User extends Model implements
     public function getVerificationCode(): string
     {
         return $this->userVerificationCode->code;
+    }
+
+    public function routeNotificationForExpo($notification): array
+    {
+        return $this->userDevices()->whereNotNull(UserDevice::FIELD_PUSH_TOKEN)->pluck(UserDevice::FIELD_PUSH_TOKEN)->toArray();
     }
 }

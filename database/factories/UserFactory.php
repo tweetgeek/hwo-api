@@ -55,8 +55,8 @@ class UserFactory extends Factory
         return $this->has(UserGarbageSchedule::factory());
     }
 
-    public function withScheduleWitchCollections()
+    public function withScheduleWithCollections()
     {
-        return $this->has(UserGarbageSchedule::factory()->withCollections());
+        return $this->has(UserGarbageSchedule::factory()->withCollections()->withNextCollections());
     }
 }

@@ -13,6 +13,7 @@ class UserDevice extends Model
 
     public const FIELD_TYPE = 'type';
     public const FIELD_BRAND = 'brand';
+    public const FIELD_PUSH_TOKEN = 'push_token';
     public const FIELD_MANUFACTURER = 'manufacturer';
     public const FIELD_MODEL_NAME = 'model_name';
     public const FIELD_MODEL_ID = 'model_id';
@@ -25,6 +26,7 @@ class UserDevice extends Model
     protected $fillable = [
         self::FIELD_TYPE,
         self::FIELD_BRAND,
+        self::FIELD_PUSH_TOKEN,
         self::FIELD_MANUFACTURER,
         self::FIELD_MODEL_NAME,
         self::FIELD_MODEL_ID,

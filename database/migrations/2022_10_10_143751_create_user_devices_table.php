@@ -11,6 +11,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->enum('type', ['web', 'mobile']);
+            $table->string('push_token')->nullable();
             $table->string('brand')->nullable();
             $table->string('manufacturer')->nullable();
             $table->string('model_name')->nullable();

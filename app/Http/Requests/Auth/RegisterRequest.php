@@ -26,6 +26,7 @@ class RegisterRequest extends FormRequest
             'device.osVersion' => ['required_if:device.type,mobile'],
             'device.osBuildId' => ['required_if:device.type,mobile'],
             'device.deviceName' => ['required_if:device.type,mobile'],
+            'device.pushToken' => ['string'],
         ];
     }
 }

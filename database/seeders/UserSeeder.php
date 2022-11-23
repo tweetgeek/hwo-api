@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         if (config('app.env') === 'local') {
             User::factory()
                 ->withWelcomeOnboarding()
-                ->withScheduleWitchCollections()
+                ->withScheduleWithCollections()
                 ->create(['name' => 'John Doe', 'email' => 'user@testuser.pl', 'password' => Hash::make('fiat126IsAwes0m3')]);
         }
     }
