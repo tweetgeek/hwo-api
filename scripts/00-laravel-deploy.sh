@@ -3,9 +3,10 @@
 echo "Running composer"
 cp /etc/secrets/.env .env
 #composer global require hirak/prestissimo
-composer install --no-dev --working-dir=/var/www/html
+composer install --working-dir=/var/www/html
 
 echo "Dump autoload..."
+php artisan clear-compiled
 composer dump-autoload
 
 echo "Clearing caches..."
