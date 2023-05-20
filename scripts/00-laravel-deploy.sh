@@ -2,7 +2,7 @@
 
 echo "Running composer"
 cp /etc/secrets/.env .env
-composer global require hirak/prestissimo
+#composer global require hirak/prestissimo
 composer install --working-dir=/var/www/html
 
 echo "Dump autoload..."
