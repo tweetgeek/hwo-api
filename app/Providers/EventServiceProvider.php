@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Events\OnboardingCreatedEvent;
-use App\Listeners\SendVerificationCodeToRegisteredUserListener;
 use App\Listeners\UserOnboardingCreatedListener;
 use App\Models\UserGarbageSchedule;
 use App\Observers\UserGarbageScheduleObserver;
@@ -21,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
-            SendVerificationCodeToRegisteredUserListener::class,
+//            SendVerificationCodeToRegisteredUserListener::class,
         ],
         OnboardingCreatedEvent::class => [
             UserOnboardingCreatedListener::class
