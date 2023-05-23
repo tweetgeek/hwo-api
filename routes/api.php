@@ -35,7 +35,7 @@ Route::group(['prefix' => '/auth'], static function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-//    Route::get('/info', [InfoController::class, 'index']);
+    //    Route::get('/info', [InfoController::class, 'index']);
     // User
     Route::get('/user', [UserController::class, 'get']);
 
