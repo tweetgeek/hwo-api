@@ -11,7 +11,7 @@ return new class () extends Migration {
         ['id' => 4, 'name' => 'Plastiki', 'icon' => 'plastik', 'color' => '#facc15'],
         ['id' => 5, 'name' => 'Szkło', 'icon' => 'szklo', 'color' => '#16a34a', 'primary' => true],
         ['id' => 6, 'name' => 'Bioodpady', 'icon' => 'bio', 'color' => '#92400e', 'primary' => true],
-        ['id' => 7, 'name' => 'Odpady wystawkowe', 'icon' => 'gabaryty', 'color' => '#9ca3af'],
+        ['id' => 7, 'name' => 'Odpady wystawkowe', 'icon' => 'gabaryty', 'color'  => '#9ca3af'],
         ['id' => 8, 'name' => 'Elektronika', 'icon' => 'elektronika', 'color' => '#000'],
         ['id' => 9, 'name' => 'Baterie', 'icon' => 'baterie', 'color' => '#000'],
         ['id' => 10, 'name' => 'Odpady zielone', 'icon' => 'ogrodowe', 'color' => '#000'],

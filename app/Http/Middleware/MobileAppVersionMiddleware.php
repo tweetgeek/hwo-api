@@ -3,10 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 
-class MobileAppVersion extends Middleware
+class MobileAppVersionMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
@@ -18,5 +17,6 @@ class MobileAppVersion extends Middleware
         }
 
         return $next($request);
+        
     }
 }
