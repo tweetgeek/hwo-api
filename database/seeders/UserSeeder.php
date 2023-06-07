@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
                 ->afterMaking(function (User $user) {
                     $user->assignRole(UserRole::SUPER_ADMIN->value);
                 })
-                ->create(['name' => 'John Doe', 'email' => 'user@testuser.pl', 'password' => Hash::make('fiat126IsAwes0m3')]);
+                ->create(['name' => 'John Doe', 'email' => 'user@tweetgeek.pl', 'password' => Hash::make('password')]);
         }
     }
 }

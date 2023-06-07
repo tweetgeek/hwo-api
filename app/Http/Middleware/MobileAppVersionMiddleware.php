@@ -10,13 +10,13 @@ class MobileAppVersionMiddleware
     public function handle(Request $request, Closure $next)
     {
         $passedAppVersion = $request->header('App-Version');
-        if ($passedAppVersion !== '0.0.1') {
-            dd('wrong app version');
+//        if ($passedAppVersion !== '0.0.1') {
+//            dd('wrong app version');
 
-            return response()->json(['message' => 'aaa'], 222);
-        }
+//            return response()->json(['message' => 'aaa'], 222);
+//        }
 
         return $next($request);
-        
+
     }
 }
