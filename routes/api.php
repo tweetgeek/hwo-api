@@ -14,28 +14,28 @@ use Illuminate\Support\Facades\Route;
 //    return response()->json(['status' => 'ok']);
 //});
 
-Route::group(['prefix' => '/auth'], static function () {
-    Route::post('/register', [AuthenticateController::class, 'register'])
-        ->middleware('guest');
-
-    Route::post('/verify', [AuthenticateController::class, 'verify'])
-        ->middleware('auth:sanctum');
-
-    Route::post('/login', [AuthenticateController::class, 'login'])
-        ->middleware('guest');
-
-    Route::post('/forgot-password', [AuthenticateController::class, 'forgotPassword'])
-        ->middleware('guest');
-
-    Route::post('/reset-password', [AuthenticateController::class, 'resetPassword'])
-        ->middleware('guest');
-
-    Route::post('/logout', [AuthenticateController::class, 'destroy'])
-        ->middleware('auth:sanctum');
-});
+//Route::group(['prefix' => '/auth'], static function () {
+//    Route::post('/register', [AuthenticateController::class, 'register'])
+//        ->middleware('guest');
+//
+//    Route::post('/verify', [AuthenticateController::class, 'verify'])
+//        ->middleware('auth:sanctum');
+//
+//    Route::post('/login', [AuthenticateController::class, 'login'])
+//        ->middleware('guest');
+//
+//    Route::post('/forgot-password', [AuthenticateController::class, 'forgotPassword'])
+//        ->middleware('guest');
+//
+//    Route::post('/reset-password', [AuthenticateController::class, 'resetPassword'])
+//        ->middleware('guest');
+//
+//    Route::post('/logout', [AuthenticateController::class, 'destroy'])
+//        ->middleware('auth:sanctum');
+//});
 
 Route::middleware(['auth:sanctum'])->group(function () {
-//    Route::get('/info', [InfoController::class, 'index']);
+    //    Route::get('/info', [InfoController::class, 'index']);
     // User
     Route::get('/user', [UserController::class, 'get']);
 
