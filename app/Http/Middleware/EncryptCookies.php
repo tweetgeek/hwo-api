@@ -12,6 +12,7 @@ class EncryptCookies extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        '/sanctum/csrf-cookie',
+        '/login'
     ];
 }
