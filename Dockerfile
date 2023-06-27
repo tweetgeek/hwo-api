@@ -21,11 +21,9 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
 WORKDIR /app
 COPY --from=backend /app /app
 
-COPY .env.example /app/.env
+#COPY .env.example /app/.env
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    chmod 777 -R /app/storage/
+RUN chmod 777 -R /app/storage/
 
 CMD ["bash", "./run.sh"]
 EXPOSE 8000
