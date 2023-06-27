@@ -4,16 +4,6 @@ services:
     image: ghcr.io/tweetgeek/hwo-api
     env_file:
       - stack.env
-    environment:
-      APP_URL: "http://hwo-staging.tweetgeek.pl"
-      APP_ENV: staging
-      APP_DEBUG: false
-      APP_SUPPORTED_MOBILE_VERSION: 0.0.0
-      LOG_CHANNEL: stdout
-      DB_HOST: mysql
-      REDIS_HOST: redis
-      SANCTUM_STATEFUL_DOMAINS: hwo-staging.tweetgeek.pl
-      SESSION_DOMAIN: .tweetgeek.pl
     networks:
       - hwo
       - cloudflare-tunnel
@@ -35,7 +25,6 @@ services:
       MYSQL_DATABASE: '${DB_DATABASE}'
       MYSQL_USER: '${DB_USERNAME}'
       MYSQL_PASSWORD: '${DB_PASSWORD}'
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
       - 'hwo-mysql:/var/lib/mysql'
     networks:
