@@ -19,7 +19,7 @@ RUN docker-php-ext-configure opcache --enable-opcache && \
     docker-php-ext-install pdo pdo_mysql
 
 WORKDIR /app
-COPY --from=backend /app /app
+COPY --from=frontend /app /app
 
 #COPY .env.example /app/.env
 
