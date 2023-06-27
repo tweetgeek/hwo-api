@@ -113,6 +113,8 @@ services:
 networks:
   hwo:
     driver: bridge
+  cloudflare-tunnel:
+    external: true
 volumes:
   hwo-mysql:
     driver: local
@@ -122,5 +124,3 @@ volumes:
     driver: local
   hwo-minio:
     driver: local
-  cloudflare-tunnel:
-    external: true
