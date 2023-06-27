@@ -27,5 +27,5 @@ RUN php artisan config:cache && \
     php artisan route:cache && \
     chmod 777 -R /app/storage/
 
-CMD php artisan serve --host=0.0.0.0
-EXPOSE 80
+CMD ["bash", "./run.sh"]
+EXPOSE 8000
