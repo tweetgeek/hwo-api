@@ -35,3 +35,7 @@ jobs:
             ghcr.io/tweetgeek/hwo-api:latest
           build-args: |
             user=1000
+
+      - name: Deploy in portainer
+        run: |
+          curl -X POST "http://portainer.tweetserv.pl/api/stacks/webhooks/a7ebef79-eea5-493e-a9f9-8afbaa29ee83?tag=latest"
