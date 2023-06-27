@@ -7,29 +7,137 @@ on:
     branches: [ "master" ]
 
 jobs:
-  laravel-tests:
-
+  should-run-jobs:
+    name: Check if run requirements for jobs are met
     runs-on: ubuntu-latest
-
+    outputs:
+      should-run-js-job: ${{ steps.js-files-changed.outputs.any_changed }}
+      should-run-php-job: ${{ steps.php-files-changed.outputs.any_changed }}
     steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.0'
-    - uses: actions/checkout@v3
-    - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Generate key
-      run: php artisan key:generate
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
-    - name: Create Database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: vendor/bin/phpunit
+      - name: Fail if actor is dependabot, re-run manually
+        if: github.triggering_actor == 'dependabot[bot]'
+        run: exit 1
+      - id: calculate-fetch-depth
+        name: Calculate fetch-depth
+        # github actions doesn't allow to add `1` in template string, so we have to execute separate step
+        env:
+          COMMITS_COUNT: ${{ github.event.pull_request.commits }}
+        # for push event it evaluates to empty string, so actions/checkout defaults to 1
+        run: echo "FETCH_DEPTH=$(($COMMITS_COUNT+1))" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: ${{ steps.calculate-fetch-depth.outputs.FETCH_DEPTH }}
+      - name: Are js files changed
+        id: js-files-changed
+        uses: tj-actions/changed-files@v33
+        with:
+          files: |
+            .github/workflows/*.yml
+            .eslintignore
+            .prettierignore
+            package.json
+            tailwind.config.js
+            postcss.config.js
+            vite.config.json
+            yarn.lock
+            *.ts
+            *.js
+            .*rc
+            resources/**/*.css
+            resources/**/*.scss
+            resources/**/*.js
+            resources/**/*.ts
+            resources/**/*.vue
+            resources/**/*.json
+            resources/**/*.svg
+      - name: Are php files changed
+        id: php-files-changed
+        uses: tj-actions/changed-files@v33
+        with:
+          files: |
+            .github/workflows/*.yml
+            **/*.php
+            composer.json
+            composer.lock
+            docker-compose.yaml
+            phpstan.neon
+            phpunit.unit.xml
+            phpunit.xml
+  test-frontend:
+    name: Frontend tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [ should-run-jobs ]
+    if: needs.should-run-jobs.outputs.should-run-js-job == 'true'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16'
+      - uses: actions/cache@v3
+        name: Cache node_modules
+        id: cache-node-modules
+        with:
+          path: node_modules
+          key: app-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --immutable --immutable-cache
+  #      - name: TypeScript check
+  #        run: yarn ts:check
+  #      - name: Run unit tests
+  #        run: yarn test
+  #      - name: Lint TS/JS/Vue files
+  #        run: yarn lint:scripts
+  #      - name: Lint styles
+  #        run: yarn lint:styles
+  #      - name: Prettier check
+  #        run: yarn format:check
+  #      - name: Danger
+  #        run: npx danger ci
+  #        env:
+  #          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_TOKEN }}
+
+  test-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.1'
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+      - name: Create Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.16'
+      - uses: actions/cache@v3
+        name: Cache node_modules
+        id: cache-node-modules
+        with:
+          path: node_modules
+          key: app-node-modules-${{ hashFiles('yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --immutable --immutable-cache
+      - name: Build app
+        run: yarn build
+
+
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.1'
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: vendor/bin/phpunit
