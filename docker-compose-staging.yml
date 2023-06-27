@@ -27,6 +27,8 @@ services:
       - soketi
   mysql:
     image: 'mysql/mysql-server:8.0'
+    env_file:
+      - stack.env
     environment:
       MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
       MYSQL_ROOT_HOST: '%'
@@ -48,8 +50,8 @@ services:
       timeout: 5s
   redis:
     image: 'redis:alpine'
-    ports:
-      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    env_file:
+      - stack.env
     volumes:
       - 'hwo-redis:/data'
     networks:
@@ -63,10 +65,14 @@ services:
       timeout: 5s
   memcached:
     image: 'memcached:alpine'
+    env_file:
+      - stack.env
     networks:
       - hwo
   meilisearch:
     image: 'getmeili/meilisearch:latest'
+    env_file:
+      - stack.env
     volumes:
       - 'hwo-meilisearch:/meili_data'
     networks:
@@ -82,6 +88,8 @@ services:
       timeout: 5s
   minio:
     image: 'minio/minio:latest'
+    env_file:
+      - stack.env
     environment:
       MINIO_ROOT_USER: hwo
       MINIO_ROOT_PASSWORD: password
@@ -100,10 +108,14 @@ services:
       timeout: 5s
   mailpit:
     image: 'axllent/mailpit:latest'
+    env_file:
+      - stack.env
     networks:
       - hwo
   soketi:
     image: 'quay.io/soketi/soketi:latest-16-alpine'
+    env_file:
+      - stack.env
     environment:
       SOKETI_DEBUG: '${SOKETI_DEBUG:-1}'
       SOKETI_METRICS_SERVER_PORT: '9601'
