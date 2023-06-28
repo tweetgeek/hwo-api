@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\AuthenticateController;
+use App\Http\Controllers\Api\CsrfCookieController;
 use App\Http\Controllers\Api\GarbageCollectionController;
 use App\Http\Controllers\Api\GarbageScheduleController;
 use App\Http\Controllers\Api\GarbageSchedulesController;
@@ -10,29 +10,7 @@ use App\Http\Controllers\Api\UserNotificationSettingsController;
 use App\Http\Controllers\Api\UserOnboardingController;
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/ping', static function () {
-//    return response()->json(['status' => 'ok']);
-//});
-
-//Route::group(['prefix' => '/auth'], static function () {
-//    Route::post('/register', [AuthenticateController::class, 'register'])
-//        ->middleware('guest');
-//
-//    Route::post('/verify', [AuthenticateController::class, 'verify'])
-//        ->middleware('auth:sanctum');
-//
-//    Route::post('/login', [AuthenticateController::class, 'login'])
-//        ->middleware('guest');
-//
-//    Route::post('/forgot-password', [AuthenticateController::class, 'forgotPassword'])
-//        ->middleware('guest');
-//
-//    Route::post('/reset-password', [AuthenticateController::class, 'resetPassword'])
-//        ->middleware('guest');
-//
-//    Route::post('/logout', [AuthenticateController::class, 'destroy'])
-//        ->middleware('auth:sanctum');
-//});
+Route::get('/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     //    Route::get('/info', [InfoController::class, 'index']);
