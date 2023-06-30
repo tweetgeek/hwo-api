@@ -3,9 +3,10 @@
 namespace App\Providers;
 
 use App\Events\OnboardingCreatedEvent;
-use App\Listeners\UserOnboardingCreatedListener;
+use App\Listeners\CreateUserSettingsAfterOnboarding;
 use App\Models\UserGarbageSchedule;
 use App\Observers\UserGarbageScheduleObserver;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,13 +23,16 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
 //            SendVerificationCodeToRegisteredUserListener::class,
         ],
+        Login::class => [
+        ],
         OnboardingCreatedEvent::class => [
-            UserOnboardingCreatedListener::class
+            CreateUserSettingsAfterOnboarding::class
         ]
     ];
     protected $observers = [
         UserGarbageSchedule::class => [UserGarbageScheduleObserver::class],
     ];
+
     /**
      * Register any events for your application.
      */

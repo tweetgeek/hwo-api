@@ -69,11 +69,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'has_welcome_onboarding'
     ];
 
-    public function userVerificationCode(): HasOne
-    {
-        return $this->hasOne(UserVerificationCode::class);
-    }
-
     public function userOnboarding(): HasOne
     {
         return $this->hasOne(UserOnboarding::class);
@@ -124,38 +119,6 @@ class User extends Authenticatable implements MustVerifyEmail
         ], [
             UserDevice::FIELD_LAST_SEEN => Carbon::now(),
         ]);
-    }
-
-    public function createNotificationSetting(): Model
-    {
-        return $this->notificationSetting()->create();
-    }
-
-    public function isVerified(): bool
-    {
-        return !is_null($this->verified_at);
-    }
-
-    public function markAsVerified(): bool
-    {
-        return $this->forceFill([
-            'verified_at' => $this->freshTimestamp(),
-        ])->save();
-    }
-
-    public function sendVerificationCodeNotification(): void
-    {
-        $this->notify(new VerifyUser());
-    }
-
-    public function getEmailForVerificationCode(): string
-    {
-        return $this->email;
-    }
-
-    public function getVerificationCode(): string
-    {
-        return $this->userVerificationCode->code;
     }
 
     public function routeNotificationForExpo($notification): array

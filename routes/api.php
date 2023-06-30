@@ -5,7 +5,9 @@ use App\Http\Controllers\Api\GarbageCollectionController;
 use App\Http\Controllers\Api\GarbageScheduleController;
 use App\Http\Controllers\Api\GarbageSchedulesController;
 use App\Http\Controllers\Api\GarbageTypeController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserDeviceController;
 use App\Http\Controllers\Api\UserNotificationSettingsController;
 use App\Http\Controllers\Api\UserOnboardingController;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +38,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::get('/collections', [GarbageCollectionController::class, 'get']);
+
+    Route::get('/notifications', [NotificationController::class, 'get']);
+
+    Route::post('/device', [UserDeviceController::class, 'post']);
 });

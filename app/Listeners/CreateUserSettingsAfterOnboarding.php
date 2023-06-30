@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\OnboardingCreatedEvent;
 use App\Models\UserOnboarding;
 
-class UserOnboardingCreatedListener
+class CreateUserSettingsAfterOnboarding
 {
     public function handle(OnboardingCreatedEvent $event): void
     {
