@@ -10,7 +10,7 @@ class MobileAppVersionMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $isMobileApp = $request->hasHeader('app-version');
+        $isMobileApp = $request->hasHeader(config('mobile.app_version_header'));
         if (!$isMobileApp) {
             return $next($request);
         }

@@ -106,6 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $this->userDevices()->updateOrCreate([
+            UserDevice::FIELD_ID => $device['id'],
             UserDevice::FIELD_TYPE => $device['type'],
             UserDevice::FIELD_PUSH_TOKEN => $device['pushToken'] ?? null,
             UserDevice::FIELD_BRAND => $device['brand'],

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\UserDeviceFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 class UserDevice extends Model
 {
     use HasFactory;
+    use HasUuids;
 
+    public const FIELD_ID = 'id';
     public const FIELD_TYPE = 'type';
     public const FIELD_BRAND = 'brand';
     public const FIELD_PUSH_TOKEN = 'push_token';
@@ -24,6 +27,7 @@ class UserDevice extends Model
     public const FIELD_LAST_SEEN = 'last_seen';
 
     protected $fillable = [
+        self::FIELD_ID,
         self::FIELD_TYPE,
         self::FIELD_BRAND,
         self::FIELD_PUSH_TOKEN,
