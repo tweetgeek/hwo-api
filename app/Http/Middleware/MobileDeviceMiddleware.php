@@ -28,8 +28,7 @@ class MobileDeviceMiddleware
         }
 
         $deviceId = $request->header(config('mobile.device_info_id_header'));
-        if (!$deviceId || !$request->user()->userDevices()->find($deviceId) || $request->session()->get(config('mobile.device_info_id_header')) !== $deviceId) {
-            $request->session()->invalidate();
+        if (!$deviceId || !$request->user()->userDevices()->byDeviceId($request->user()->id, $deviceId)) {
             throw new AuthenticationException;
         }
 

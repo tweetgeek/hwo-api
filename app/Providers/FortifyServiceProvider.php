@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Actions\AuthorizeMobileDevice;
+use App\Actions\Auth\AuthorizeMobileDevice;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;

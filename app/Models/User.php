@@ -13,18 +13,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
-    use HasApiTokens;
+//    use HasApiTokens;
     use HasFactory;
-    use HasProfilePhoto;
+
+//    use HasProfilePhoto;
     use Notifiable;
-    use TwoFactorAuthenticatable;
+
+//    use TwoFactorAuthenticatable;
     use HasRoles;
 
     /**
@@ -46,8 +46,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
     ];
 
     /**
@@ -65,7 +63,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $appends = [
-        'profile_photo_url',
         'has_welcome_onboarding'
     ];
 
@@ -99,15 +96,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->userOnboarding()->where('name', 'welcome')->exists();
     }
 
-    public function authorizeDevice(array $device): Model
+    public function authorizeDevice(string $deviceId, array $device): Model
     {
-        if ($device['type'] === 'web') {
-            return new UserDevice($device);
+        if ($userDevice = $this->userDevices()->where(UserDevice::FIELD_DEVICE_ID, $deviceId)->first()) {
+            $userDevice->last_seen = Carbon::now();
+            $userDevice->save();
+            return $userDevice;
         }
 
-        return $this->userDevices()->updateOrCreate([
-            UserDevice::FIELD_ID => $device['id'],
-            UserDevice::FIELD_TYPE => $device['type'],
+        return $this->userDevices()->create([
+            UserDevice::FIELD_DEVICE_ID => $deviceId,
             UserDevice::FIELD_PUSH_TOKEN => $device['pushToken'] ?? null,
             UserDevice::FIELD_BRAND => $device['brand'],
             UserDevice::FIELD_MANUFACTURER => $device['manufacturer'],
@@ -117,7 +115,6 @@ class User extends Authenticatable implements MustVerifyEmail
             UserDevice::FIELD_OS_VERSION => $device['osVersion'],
             UserDevice::FIELD_OS_BUILD_ID => $device['osBuildId'],
             UserDevice::FIELD_DEVICE_NAME => $device['deviceName'],
-        ], [
             UserDevice::FIELD_LAST_SEEN => Carbon::now(),
         ]);
     }
@@ -125,5 +122,25 @@ class User extends Authenticatable implements MustVerifyEmail
     public function routeNotificationForExpo($notification): array
     {
         return $this->userDevices()->whereNotNull(UserDevice::FIELD_PUSH_TOKEN)->pluck(UserDevice::FIELD_PUSH_TOKEN)->toArray();
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier(): mixed
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims(): array
+    {
+        return [];
     }
 }

@@ -14,8 +14,8 @@ class LoginRequest extends FormRequest
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
             'device' => ['required'],
+            'device.id' => ['required', 'uuid'],
             'device.type' => ['required', new Enum(DeviceType::class)],
-            'device.isDevice' => ['required_if:device.type,mobile'],
             'device.brand' => ['required_if:device.type,mobile'],
             'device.manufacturer' => ['required_if:device.type,mobile'],
             'device.modelName' => ['required_if:device.type,mobile'],
@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
             'device.osVersion' => ['required_if:device.type,mobile'],
             'device.osBuildId' => ['required_if:device.type,mobile'],
             'device.deviceName' => ['required_if:device.type,mobile'],
-            'device.pushToken' => ['string'],
+            'device.pushToken' => ['nullable', 'string'],
         ];
     }
 }

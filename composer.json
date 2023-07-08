@@ -7,14 +7,12 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
-        "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/framework": "^10.10",
-        "laravel/jetstream": "^3.2",
-        "laravel/sanctum": "^3.2",
         "laravel/slack-notification-channel": "^2.5",
         "laravel/tinker": "^2.8",
         "spatie/laravel-permission": "^5.10",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "tymon/jwt-auth": "^2.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",

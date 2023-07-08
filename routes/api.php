@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CsrfCookieController;
 use App\Http\Controllers\Api\GarbageCollectionController;
 use App\Http\Controllers\Api\GarbageScheduleController;
@@ -12,9 +13,19 @@ use App\Http\Controllers\Api\UserNotificationSettingsController;
 use App\Http\Controllers\Api\UserOnboardingController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::get('me', [AuthController::class, 'me']);
+});
+
+
 Route::get('/csrf-cookie', [CsrfCookieController::class, 'show']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
     //    Route::get('/info', [InfoController::class, 'index']);
     // User
     Route::get('/user', [UserController::class, 'get']);

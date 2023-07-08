@@ -8,9 +8,9 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('user_devices', static function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
+            $table->uuid('device_id');
             $table->foreignId('user_id')->constrained();
-            $table->enum('type', ['web', 'mobile']);
             $table->string('push_token')->nullable();
             $table->string('brand')->nullable();
             $table->string('manufacturer')->nullable();
