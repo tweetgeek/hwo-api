@@ -15,30 +15,24 @@ class UserDevice extends Model
     public const FIELD_TYPE = 'type';
     public const FIELD_DEVICE_ID = 'device_id';
     public const FIELD_USER_ID = 'user_id';
-    public const FIELD_BRAND = 'brand';
-    public const FIELD_PUSH_TOKEN = 'push_token';
-    public const FIELD_MANUFACTURER = 'manufacturer';
+    public const FIELD_IS_DEVICE = 'is_device';
+    public const FIELD_DEVICE_TYPE = 'device_type';
     public const FIELD_MODEL_NAME = 'model_name';
-    public const FIELD_MODEL_ID = 'model_id';
     public const FIELD_OS_NAME = 'os_name';
     public const FIELD_OS_VERSION = 'os_version';
-    public const FIELD_OS_BUILD_ID = 'os_build_id';
-    public const FIELD_DEVICE_NAME = 'device_name';
+    public const FIELD_PUSH_TOKEN = 'push_token';
     public const FIELD_LAST_SEEN = 'last_seen';
 
     protected $fillable = [
         self::FIELD_DEVICE_ID,
         self::FIELD_USER_ID,
         self::FIELD_TYPE,
-        self::FIELD_BRAND,
-        self::FIELD_PUSH_TOKEN,
-        self::FIELD_MANUFACTURER,
+        self::FIELD_IS_DEVICE,
+        self::FIELD_DEVICE_TYPE,
         self::FIELD_MODEL_NAME,
-        self::FIELD_MODEL_ID,
         self::FIELD_OS_NAME,
         self::FIELD_OS_VERSION,
-        self::FIELD_OS_BUILD_ID,
-        self::FIELD_DEVICE_NAME,
+        self::FIELD_PUSH_TOKEN,
         self::FIELD_LAST_SEEN,
     ];
 
@@ -46,7 +40,7 @@ class UserDevice extends Model
         self::FIELD_LAST_SEEN => 'datetime'
     ];
 
-    public function scopeByDeviceId(Builder $query, int $userId, string $deviceId)
+    public function scopeByDeviceId(Builder $query, int $userId, string $deviceId): void
     {
         $query->where(self::FIELD_DEVICE_ID, $deviceId)->where(self::FIELD_USER_ID, $userId);
     }

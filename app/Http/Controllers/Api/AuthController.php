@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Actions\Auth\AuthorizeMobileDevice;
+use App\Enums\UserRole;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\VerifyRequest;
 use App\LoginRateLimiter;
 use App\Models\User;
+use DB;
 use Exception;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends ApiController
@@ -30,11 +35,16 @@ class AuthController extends ApiController
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function login(LoginRequest $request): JsonResponse
     {
         if (!$token = auth()->attempt($request->only(['email', 'password']))) {
             $this->limiter->increment($request);
-            return $this->throwFailedAuthenticationException($request);
+            throw ValidationException::withMessages([
+                'email' => [trans('auth.failed')],
+            ]);
         }
 
         $device = $this->processDevice($request);
@@ -61,6 +71,9 @@ class AuthController extends ApiController
         return $this->respondOk(auth()->user());
     }
 
+    /**
+     * @throws Exception
+     */
     public function register(RegisterRequest $request): JsonResponse
     {
         $payload = $request->only([
@@ -69,15 +82,36 @@ class AuthController extends ApiController
             'password',
         ]);
 
-        $user = User::create($payload);
-        event(new Registered($user));
+        return DB::transaction(function () use ($payload, $request) {
+            $user = User::create([
+                'name' => $payload['name'],
+                'email' => $payload['email'],
+                'password' => Hash::make($payload['password']),
+            ]);
+            $user->assignRole(UserRole::USER->value);
 
-        $token = auth()->login($user);
-        $device = $this->processDevice($request);
-        $this->limiter->clear($request);
-        event(new Login('api', auth()->user(), true));
+            $token = auth()->login($user);
+            $device = $this->processDevice($request);
+            $this->limiter->clear($request);
 
-        return $this->respondWithToken($token, $device?->id);
+            event(new Registered($user));
+            event(new Login('api', auth()->user(), true));
+
+            return $this->respondWithToken($token, $device?->id);
+        });
+    }
+
+
+    public function verify(VerifyRequest $request): JsonResponse
+    {
+        $code = $request->get('code');
+
+        $user = auth()->user();
+        $user->markEmailAsVerified();
+        $user->userVerificationCode()->where('code', $code)->delete();
+        event(new Verified($user));
+
+        return $this->respondNoContent();
     }
 
     /**
@@ -98,23 +132,14 @@ class AuthController extends ApiController
         ]);
     }
 
-    private function throwFailedAuthenticationException(LoginRequest $request)
-    {
-        throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
-        ]);
-    }
-
     /**
      * @throws Exception
      */
     private function processDevice(Request $request)
     {
-        if ($request->hasHeader(config('mobile.app_version_header'))) {
+        if ($request->hasHeader(config('mobile.app_version_header')) || $request->has(config('mobile.device_info_field'))) {
             return app(AuthorizeMobileDevice::class)->handle($request);
         }
-
-        dd('device');
 
         return null;
     }

@@ -1,25 +1,25 @@
 <?php
 
+use App\Enums\DeviceType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class () extends Migration {
+return new class () extends Migration
+{
     public function up(): void
     {
         Schema::create('user_devices', static function (Blueprint $table) {
             $table->id();
             $table->uuid('device_id');
             $table->foreignId('user_id')->constrained();
-            $table->string('push_token')->nullable();
-            $table->string('brand')->nullable();
-            $table->string('manufacturer')->nullable();
+            $table->enum('type', [DeviceType::WEB->value, DeviceType::MOBILE->value])->nullable();
+            $table->boolean('is_device')->nullable();
+            $table->string('device_type')->nullable();
             $table->string('model_name')->nullable();
-            $table->string('model_id')->nullable();
             $table->string('os_name')->nullable();
             $table->string('os_version')->nullable();
-            $table->string('os_build_id')->nullable();
-            $table->string('device_name')->nullable();
+            $table->string('push_token')->nullable();
             $table->dateTime('last_seen')->nullable()->default(null);
             $table->timestamps();
         });

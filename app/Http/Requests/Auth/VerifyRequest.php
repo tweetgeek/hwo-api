@@ -14,7 +14,7 @@ class VerifyRequest extends FormRequest
     {
         return [
             'email' => ['required', 'string', 'email', (new Exists(User::class, 'email'))->where('id', Auth::user()->id)],
-            'code' => ['required', 'string', 'min:6', (new Exists(UserVerificationCode::class, 'code'))->where('user_id', Auth::user()->id)],
+            'code' => ['required', 'string', 'min:4', (new Exists(UserVerificationCode::class, 'code'))->where('user_id', Auth::user()->id)],
         ];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Notifications\VerifyUser;
-use Carbon\Carbon;
+use App\Dtos\DeviceDto;
+use App\Notifications\VerifyUserNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,14 +18,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
-//    use HasApiTokens;
+    //    use HasApiTokens;
     use HasFactory;
 
-//    use HasProfilePhoto;
+    //    use HasProfilePhoto;
     use Notifiable;
 
-//    use TwoFactorAuthenticatable;
+    //    use TwoFactorAuthenticatable;
     use HasRoles;
+    use \Illuminate\Auth\MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -86,6 +87,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->hasMany(UserDevice::class);
     }
 
+    public function userVerificationCode(): HasOne
+    {
+        return $this->hasOne(UserVerificationCode::class);
+    }
+
     protected static function newFactory(): Factory
     {
         return UserFactory::new();
@@ -96,32 +102,46 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->userOnboarding()->where('name', 'welcome')->exists();
     }
 
-    public function authorizeDevice(string $deviceId, array $device): Model
+    public function authorizeDevice(DeviceDto $device): Model
     {
-        if ($userDevice = $this->userDevices()->where(UserDevice::FIELD_DEVICE_ID, $deviceId)->first()) {
-            $userDevice->last_seen = Carbon::now();
+        if ($userDevice = $this->userDevices()->where(UserDevice::FIELD_DEVICE_ID, $device->deviceId)->first()) {
+            $userDevice->last_seen = $device->lastSeen;
             $userDevice->save();
             return $userDevice;
         }
 
         return $this->userDevices()->create([
-            UserDevice::FIELD_DEVICE_ID => $deviceId,
-            UserDevice::FIELD_PUSH_TOKEN => $device['pushToken'] ?? null,
-            UserDevice::FIELD_BRAND => $device['brand'],
-            UserDevice::FIELD_MANUFACTURER => $device['manufacturer'],
-            UserDevice::FIELD_MODEL_NAME => $device['modelName'],
-            UserDevice::FIELD_MODEL_ID => $device['modelId'],
-            UserDevice::FIELD_OS_NAME => $device['osName'],
-            UserDevice::FIELD_OS_VERSION => $device['osVersion'],
-            UserDevice::FIELD_OS_BUILD_ID => $device['osBuildId'],
-            UserDevice::FIELD_DEVICE_NAME => $device['deviceName'],
-            UserDevice::FIELD_LAST_SEEN => Carbon::now(),
+            UserDevice::FIELD_DEVICE_ID => $device->deviceId,
+            UserDevice::FIELD_TYPE => $device->type,
+            UserDevice::FIELD_IS_DEVICE => $device->isDevice,
+            UserDevice::FIELD_DEVICE_TYPE => $device->deviceType,
+            UserDevice::FIELD_MODEL_NAME => $device->modelName,
+            UserDevice::FIELD_OS_NAME => $device->osName,
+            UserDevice::FIELD_OS_VERSION => $device->osVersion,
+            UserDevice::FIELD_PUSH_TOKEN => $device->pushToken,
+            UserDevice::FIELD_LAST_SEEN => $device->lastSeen,
         ]);
     }
 
     public function routeNotificationForExpo($notification): array
     {
         return $this->userDevices()->whereNotNull(UserDevice::FIELD_PUSH_TOKEN)->pluck(UserDevice::FIELD_PUSH_TOKEN)->toArray();
+    }
+
+    public function hasVerifiedEmail(): bool
+    {
+        return !is_null($this->email_verified_at);
+    }
+
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $code = $this->createVerifyCode();
+        $this->notify(new VerifyUserNotification($code));
     }
 
     /**
@@ -142,5 +162,12 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    private function createVerifyCode(): string
+    {
+        $code = substr(md5(uniqid(mt_rand(), true)), 0, 4);
+        $this->userVerificationCode()->create(['code' => $code]);
+        return $code;
     }
 }

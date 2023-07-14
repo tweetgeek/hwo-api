@@ -1,0 +1,90 @@
+### Create user
+POST http://localhost/api/auth/register
+Accept: application/json
+Content-Type: application/json
+App-Device-Id: "{{ device_id }}"
+
+{
+  "name": "{{ name }}",
+  "email": "5{{ email }}",
+  "password": "{{ password }}",
+  "password_confirmation": "{{ password }}",
+  "device": {
+    "deviceId": "{{ device_id }}",
+    "type": "mobile",
+    "isDevice": true,
+    "deviceType": "DESKTOP",
+    "modelName": "test",
+    "osName": "iOS",
+    "osVersion": "12.3.1",
+    "pushToken": null
+  }
+}
+
+> {% client.log(response.body.access_token); client.global.set('token', response.body.access_token) %}
+
+### Verify account
+POST http://localhost/api/auth/verify
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+App-Device-Id: "{{ device_id }}"
+
+{ "email": "{{ email }}", "code": "1ffd" }
+
+### Login
+POST http://localhost/api/auth/login
+Accept: application/json
+Content-Type: application/json
+App-Device-Id: "{{ device_id }}"
+
+{
+  "email": "{{ email }}",
+  "password": "{{ password }}",
+  "device": {
+    "deviceId": "{{ device_id }}",
+    "type": "mobile",
+    "isDevice": true,
+    "deviceType": "DESKTOP",
+    "modelName": "test",
+    "osName": "iOS",
+    "osVersion": "12.3.1",
+    "pushToken": null
+  }
+}
+> {%  client.log(response.body.access_token); client.global.set('token', response.body.access_token); %}
+
+### Get me
+GET http://localhost/api/auth/me
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+App-Device-Id: "{{ device_id }}"
+
+### Reset password
+POST http://localhost/api/auth/login
+Accept: application/json
+Content-Type: application/json
+App-Device-Id: "{{ device_id }}"
+
+{ "email": "{{ email }}" }
+
+### Set new password
+POST http://localhost/api/auth/login
+Accept: application/json
+Content-Type: application/json
+App-Device-Id: "{{ device_id }}"
+
+{
+  "email": "{{ email }}",
+  "password": "{{ password }}",
+  "password_confirmation": "{{ password }}",
+   "code": "1234"
+}
+
+### Get collections
+GET http://localhost/api/collections
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+App-Device-Id: "{{ device_id }}"

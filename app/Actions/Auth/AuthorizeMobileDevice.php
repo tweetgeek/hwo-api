@@ -2,6 +2,7 @@
 
 namespace App\Actions\Auth;
 
+use App\Dtos\DeviceDto;
 use App\Models\UserDevice;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -10,7 +11,7 @@ class AuthorizeMobileDevice
 {
     public function handle(Request $request): UserDevice
     {
-        if (!$deviceId = $request->header(config('mobile.device_info_id_header'))) {
+        if (!$request->header(config('mobile.device_info_id_header'))) {
             throw ValidationException::withMessages([
                 'device' => ['Invalid device!'],
             ]);
@@ -22,6 +23,6 @@ class AuthorizeMobileDevice
             ]);
         }
 
-        return $request->user()->authorizeDevice($deviceId, $request->get(config('mobile.device_info_field')));
+        return $request->user()->authorizeDevice(DeviceDto::fromRequest($request->get(config('mobile.device_info_field'))));
     }
 }
