@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Repositories\UserGarbageScheduleRepository;
 use Illuminate\Http\JsonResponse;
+use Request;
 
 class GarbageSchedulesController extends ApiController
 {
@@ -11,8 +12,8 @@ class GarbageSchedulesController extends ApiController
     {
     }
 
-    public function get(): JsonResponse
+    public function get(Request $request): JsonResponse
     {
-        return $this->respondOk($this->garbageScheduleRepository->getAll());
+        return $this->respondOk($this->garbageScheduleRepository->getAll($request->user()));
     }
 }

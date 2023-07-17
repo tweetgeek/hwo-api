@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
 use App\Models\UserOnboarding;
-use Auth;
 
 class UserOnboardingRepository
 {
-    public function create(string $name, mixed $value): UserOnboarding
+    public function create(User $user, string $name, mixed $value): UserOnboarding
     {
-        return Auth::user()->userOnboarding()->create([UserOnboarding::FIELD_NAME => $name, UserOnboarding::FIELD_VALUE => $value]);
+        return $user->userOnboarding()->create([UserOnboarding::FIELD_NAME => $name, UserOnboarding::FIELD_VALUE => $value]);
     }
 
-    public function existsByName(string $name): bool
+    public function existsByName(User $user, string $name): bool
     {
-        return Auth::user()->userOnboarding()->where(UserOnboarding::FIELD_NAME, $name)->exists();
+        return $user->userOnboarding()->where(UserOnboarding::FIELD_NAME, $name)->exists();
     }
 }

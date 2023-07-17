@@ -2,23 +2,25 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
+use App\Models\UserGarbageSchedule;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Ramsey\Uuid\Uuid;
 
 class UserGarbageScheduleRepository
 {
-    public function getAll()
+    public function getAll(User $user): Collection
     {
-        return Auth::user()
+        return $user
             ->userGarbageSchedules()
             ->orderBy('updated_at', 'desc')
             ->get();
     }
 
-    public function getFirst()
+    public function getFirst(User $user): UserGarbageSchedule|null
     {
-        return Auth::user()
+        return $user
             ->userGarbageSchedules()
             ->with('userGarbageCollections', fn ($query) => $query->where('date', '>=', Carbon::now()))
             ->with('userGarbageCollections.garbageType')
@@ -26,9 +28,9 @@ class UserGarbageScheduleRepository
             ->first();
     }
 
-    public function create(string $name)
+    public function create(User $user, string $name): UserGarbageSchedule
     {
-        return Auth::user()
+        return $user
             ->userGarbageSchedules()
             ->create(['name' => $name, 'code' => Uuid::uuid4()]);
     }

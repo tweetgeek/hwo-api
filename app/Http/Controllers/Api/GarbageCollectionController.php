@@ -14,9 +14,10 @@ class GarbageCollectionController extends ApiController
 
     public function get(Request $request): JsonResponse
     {
+        $user = $request->user();
         $collections = $request->query('future')
-            ? $this->userGarbageCollectionRepository->getAllFuture()
-            : $this->userGarbageCollectionRepository->getAll();
+            ? $this->userGarbageCollectionRepository->getAllFuture($user)
+            : $this->userGarbageCollectionRepository->getAll($user);
 
         return $this->respondOk($collections);
     }

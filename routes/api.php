@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CsrfCookieController;
 use App\Http\Controllers\Api\GarbageCollectionController;
 use App\Http\Controllers\Api\GarbageScheduleController;
 use App\Http\Controllers\Api\GarbageSchedulesController;
@@ -22,7 +21,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 });
 
 
-Route::get('/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 Route::middleware(['auth:api'])->group(function () {
     //    Route::get('/info', [InfoController::class, 'index']);

@@ -15,11 +15,12 @@ class UserOnboardingController extends ApiController
 
     public function post(UserOnboardingPostRequest $request): JsonResponse
     {
-        if ($this->userOnboardingRepository->existsByName($request->input('name'))) {
+        $user = $request->user();
+        if ($this->userOnboardingRepository->existsByName($user, $request->input('name'))) {
             return $this->respondOk();
         }
 
-        $userOnboarding = $this->userOnboardingRepository->create($request->input('name'), $request->input('value'));
+        $userOnboarding = $this->userOnboardingRepository->create($user, $request->input('name'), $request->input('value'));
 
         event(new OnboardingCreatedEvent($request->user(), $userOnboarding));
 
