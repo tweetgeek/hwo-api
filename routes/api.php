@@ -21,7 +21,6 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
 });
 
 
-
 Route::middleware(['auth:api'])->group(function () {
     //    Route::get('/info', [InfoController::class, 'index']);
     // User
@@ -55,4 +54,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::group(['prefix' => 'auth'], function () {
         Route::post('verify', [AuthController::class, 'verify']);
     });
+});
+
+
+Route::get('health', static function () {
+    return response()->json(['status' => 'ok']);
 });
