@@ -6,6 +6,7 @@ services:
       - stack.env
     networks:
       - hwo
+      - proxy
     depends_on:
       - mysql
       - redis
@@ -14,7 +15,6 @@ services:
       - minio
       - mailpit
       - soketi
-      - proxy
     healthcheck:
       test:
         - CMD
@@ -74,6 +74,7 @@ services:
       - 'hwo-meilisearch:/meili_data'
     networks:
       - hwo
+      - proxy
     healthcheck:
       test:
         - CMD
