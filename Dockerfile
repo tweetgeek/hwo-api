@@ -1,9 +1,12 @@
 FROM composer:2.5 as backend
+ARG TARGETARCH
 WORKDIR /app
 COPY . /app
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
 FROM node:18.16-bullseye-slim as frontend
+
+ARG TARGETARCH
 WORKDIR /app
 
 COPY --from=backend /app /app
@@ -12,6 +15,7 @@ RUN npm install && npm run build
 
 FROM php:8.1 as production
 
+ARG TARGETARCH
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
