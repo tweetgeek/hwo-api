@@ -6,8 +6,6 @@ services:
       - stack.env
     networks:
       - hwo
-    ports:
-      - '80:8000'
     depends_on:
       - mysql
       - redis
@@ -16,6 +14,15 @@ services:
       - minio
       - mailpit
       - soketi
+      - proxy
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - 'http://localhost:8000/health'
+      retries: 3
+      timeout: 5s
   mysql:
     image: 'mysql/mysql-server:8.0'
     env_file:
@@ -82,11 +89,12 @@ services:
       - stack.env
     environment:
       MINIO_ROOT_USER: hwo
-      MINIO_ROOT_PASSWORD: password
+      MINIO_ROOT_PASSWORD: bx12cgg
     volumes:
       - 'hwo-minio:/data/minio'
     networks:
       - hwo
+      - proxy
     command: 'minio server /data/minio --console-address ":8900"'
     healthcheck:
       test:
@@ -102,6 +110,7 @@ services:
       - stack.env
     networks:
       - hwo
+      - proxy
   soketi:
     image: 'quay.io/soketi/soketi:latest-16-alpine'
     env_file:
@@ -117,6 +126,8 @@ services:
 networks:
   hwo:
     driver: bridge
+  proxy:
+    external: true
 volumes:
   hwo-mysql:
     driver: local
