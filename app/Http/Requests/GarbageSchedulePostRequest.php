@@ -10,6 +10,11 @@ class GarbageSchedulePostRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
+            'isPublic' => ['required', 'boolean'],
+            'city' => ['required', 'string'],
+            'placeId' => ['required', 'string'],
+            'collectionsDates' => ['required', 'array'],
+            'collectionsDates.*.*' => ['required', 'string'],
         ];
     }
 }

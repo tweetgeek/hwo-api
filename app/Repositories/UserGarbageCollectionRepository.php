@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\GarbageType;
 use App\Models\User;
 use App\Models\UserGarbageCollection;
+use App\Models\UserGarbageSchedule;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 
@@ -28,5 +30,22 @@ class UserGarbageCollectionRepository
             ->where('date', '>=', Carbon::now())
             ->orderBy('date', 'asc')
             ->cursorPaginate(self::ITEMS_PER_PAGE);
+    }
+
+    public function create(UserGarbageSchedule $schedule, array $collectionsDates): void
+    {
+        foreach ($collectionsDates as $typeId => $collectionsDate) {
+            $type = GarbageType::findOrFail($typeId);
+            foreach ($collectionsDate as $date) {
+                if (empty($date)) {
+                    return;
+                }
+                $schedule->userGarbageCollections()->firstOrCreate([
+                    UserGarbageCollection::FIELD_USER_GARBAGE_SCHEDULE_ID => $schedule->id,
+                    UserGarbageCollection::FIELD_GARBAGE_TYPE_ID => $type->id,
+                    UserGarbageCollection::FIELD_DATE => $date,
+                ]);
+            }
+        }
     }
 }

@@ -28,10 +28,22 @@ class UserGarbageScheduleRepository
             ->first();
     }
 
-    public function create(User $user, string $name): UserGarbageSchedule
+    public function getById(User $user, int $id): UserGarbageSchedule|null
     {
         return $user
             ->userGarbageSchedules()
-            ->create(['name' => $name, 'code' => Uuid::uuid4()]);
+            ->find($id);
+    }
+
+    public function create(User $user, string $name, bool $isPublic, string $placeId): UserGarbageSchedule
+    {
+        return $user
+            ->userGarbageSchedules()
+            ->create([
+                UserGarbageSchedule::FIELD_NAME => $name,
+                UserGarbageSchedule::FIELD_CODE => Uuid::uuid4(),
+                UserGarbageSchedule::FIELD_IS_PUBLIC => $isPublic,
+                UserGarbageSchedule::FIELD_PLACE_ID => $placeId,
+            ]);
     }
 }

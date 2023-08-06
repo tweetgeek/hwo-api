@@ -18,11 +18,15 @@ class UserGarbageSchedule extends Model
     public const FIELD_USER_ID = 'user_id';
     public const FIELD_NAME = 'name';
     public const FIELD_CODE = 'code';
+    public const FIELD_IS_PUBLIC = 'is_public';
+    public const FIELD_PLACE_ID = 'place_id';
 
     public $fillable = [
         self::FIELD_USER_ID,
         self::FIELD_NAME,
         self::FIELD_CODE,
+        self::FIELD_IS_PUBLIC,
+        self::FIELD_PLACE_ID,
     ];
 
     public function user(): BelongsTo
@@ -33,6 +37,11 @@ class UserGarbageSchedule extends Model
     public function userGarbageCollections(): HasMany
     {
         return $this->hasMany(UserGarbageCollection::class);
+    }
+
+    public function userGarbageScheduleRoles(): HasMany
+    {
+        return $this->hasMany(UserGarbageScheduleRole::class);
     }
 
     protected static function newFactory(): Factory
