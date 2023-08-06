@@ -4,7 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use App\Notifications\SendUserCollectionNotification;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class CollectionsProcessCommand extends Command
 {
@@ -14,36 +16,32 @@ class CollectionsProcessCommand extends Command
 
     public function handle()
     {
-        /**
-         * Get users with avail notifications & active schedules
-         * Check collection date
-         * send notification
-         */
+        $now = Carbon::now('Europe/Berlin');
 
-        $users = User::whereNotNull('verified_at')
+        $users = User::whereNotNull('email_verified_at')
             ->withWhereHas('userOnboarding', function ($query) {
                 return $query->where('name', 'welcome');
             })
-            ->withWhereHas('userNotificationSetting', function ($query) {
-                return $query->where('at_time', '19:00');
-            })
-            ->withWhereHas('userGarbageSchedules.userGarbageCollections', function ($query) {
-                return $query->where('date', '2022-11-14');
-            })
-            ->with('userGarbageSchedules')
-            ->get();
-
-        foreach ($users as $user) {
-            $collections = collect([]);
-            $user->userGarbageSchedules->each(function ($userGarbageSchedule) use ($collections) {
-                $userGarbageSchedule->userGarbageCollections->each(function ($userGarbageCollection) use ($collections) {
-                    $collections->push($userGarbageCollection);
+            ->with('userDevices')
+            ->with('userNotificationSetting')
+            ->withWhereHas('userNotificationSetting', function ($query) use ($now) {
+                return $query->where('at_time', $now->format('H:00'))->where(function (Builder $query) {
+                    $query->where('send_to_email', 1)->orWhere('send_to_app', 1);
                 });
             });
 
-            $user->notify(new SendUserCollectionNotification($collections));
-        }
+        foreach ($users->cursor() as $user) {
+            // 0 ten sam dzień
+            // 1 dzień przed
+            // 2 dwa dni przed
+            $notify_day = $user->userNotificationSetting->notify_day;
+            $date = Carbon::now()->addDays($notify_day);
 
-        dd($users);
+            $userGarbageCollections = $user->userGarbageCollections()->where('date', $date->format('Y-m-d'))->get();
+            if ($userGarbageCollections->count()) {
+                $user->notify(new SendUserCollectionNotification($userGarbageCollections));
+                $this->info("Send collection notify to user $user->id");
+            }
+        }
     }
 }

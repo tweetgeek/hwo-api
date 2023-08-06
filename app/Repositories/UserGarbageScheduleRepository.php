@@ -22,7 +22,7 @@ class UserGarbageScheduleRepository
     {
         return $user
             ->userGarbageSchedules()
-            ->with('userGarbageCollections', fn ($query) => $query->where('date', '>=', Carbon::now()))
+            ->with('userGarbageCollections', fn ($query) => $query->where('date', '>=', Carbon::now()->format('Y-m-d')))
             ->with('userGarbageCollections.garbageType')
             ->orderBy('updated_at', 'desc')
             ->first();

@@ -61,8 +61,8 @@ class SendUserCollectionNotification extends Notification implements ShouldQueue
             ->body("Jutro wywóz: $this->collectionsList");
     }
 
-    public function toArray($notifiable): array
+    public function toArray(): array
     {
-        return [];
+        return $this->collections->toArray();
     }
 }
