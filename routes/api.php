@@ -47,6 +47,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/collections', [GarbageCollectionController::class, 'get']);
 
     Route::get('/notifications', [NotificationController::class, 'get']);
+    Route::post('/notifications', [NotificationController::class, 'post']);
 
     Route::post('/device', [UserDeviceController::class, 'post']);
 

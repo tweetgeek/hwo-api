@@ -68,7 +68,11 @@ class AuthController extends ApiController
 
     public function me(): JsonResponse
     {
-        return $this->respondOk(auth()->user());
+        /** @var User $user */
+        $user = auth()->user();
+
+        $notifications = $user->notifications()->whereNull('read_at')->get();
+        return $this->respondOk([...$user->toArray(), 'notifications' => $notifications]);
     }
 
     /**

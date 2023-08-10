@@ -58,11 +58,13 @@ class SendUserCollectionNotification extends Notification implements ShouldQueue
             ->badge($this->collections->count())
             ->enableSound()
             ->title("Harmonogram Wywozu Odpadów przypomina")
-            ->body("Jutro wywóz: $this->collectionsList");
+            ->body("Jutro wywóz: $this->collectionsList"); // todo Jutro/pojutrze
     }
 
     public function toArray(): array
     {
-        return $this->collections->toArray();
+        return [
+            'message' => $this->collectionsList
+        ];
     }
 }
