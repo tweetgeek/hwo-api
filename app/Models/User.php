@@ -9,8 +9,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -73,14 +73,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->hasOne(UserOnboarding::class);
     }
 
-    public function userGarbageSchedules(): HasMany
+    public function garbageSchedules(): BelongsToMany
     {
-        return $this->hasMany(UserGarbageSchedule::class);
-    }
-
-    public function userGarbageCollections(): HasManyThrough
-    {
-        return $this->hasManyThrough(UserGarbageCollection::class, UserGarbageSchedule::class);
+        return $this->belongsToMany(GarbageSchedule::class, 'user_garbage_schedule', 'user_id', 'garbage_schedule_id');
     }
 
     public function userNotificationSetting(): HasOne

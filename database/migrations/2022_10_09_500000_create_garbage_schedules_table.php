@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class () extends Migration {
     public function up()
     {
-        Schema::create('user_garbage_schedules', function (Blueprint $table) {
+        Schema::create('garbage_schedules', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('name')->nullable(false);
+            $table->integer('year')->nullable(false);
             $table->string('code')->unique()->nullable(false);
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

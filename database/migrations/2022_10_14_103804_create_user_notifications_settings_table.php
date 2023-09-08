@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class () extends Migration {
     public function up()
     {
-        Schema::create('user_notification_settings', function (Blueprint $table) {
+        Schema::create('user_notification_settings', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->boolean('send_to_email')->default(true);

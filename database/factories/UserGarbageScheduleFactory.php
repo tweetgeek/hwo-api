@@ -2,41 +2,25 @@
 
 namespace Database\Factories;
 
-use App\Models\UserGarbageCollection;
+use App\Enums\UserScheduleRole;
+use App\Models\GarbageSchedule;
+use App\Models\User;
 use App\Models\UserGarbageSchedule;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 
-/**
- * @extends Factory<UserGarbageSchedule>
- */
 class UserGarbageScheduleFactory extends Factory
 {
     protected $model = UserGarbageSchedule::class;
 
-    /**
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'name' => 'Mój harmonogram',
-            'code' => $this->faker->uuid(),
+            'user_id' => User::factory(),
+            'garbage_schedule_id' => GarbageSchedule::factory(),
+            'role' => UserScheduleRole::VIEWER->value,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
-    }
-
-    public function withCollections(int $count = 10)
-    {
-        return $this->has(UserGarbageCollection::factory()->count($count));
-    }
-    public function withNextCollections()
-    {
-        $now = Carbon::now();
-        return $this
-            ->has(UserGarbageCollection::factory()->state(fn () => ['date' => $now, 'garbage_type_id' => 1]))
-            ->has(UserGarbageCollection::factory()->state(fn () => ['date' => $now->clone()->add('1 day'), 'garbage_type_id' => 2]))
-            ->has(UserGarbageCollection::factory()->state(fn () => ['date' => $now->clone()->add('2 day'), 'garbage_type_id' => 3]))
-            ->has(UserGarbageCollection::factory()->state(fn () => ['date' => $now->clone()->add('3 day'), 'garbage_type_id' => 4]))
-        ;
     }
 }

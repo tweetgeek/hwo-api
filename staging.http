@@ -1,5 +1,5 @@
 ### Create user
-POST http://localhost/api/auth/register
+POST http://localhost:8088/api/auth/register
 Accept: application/json
 Content-Type: application/json
 App-Device-Id: "{{ device_id }}"
@@ -24,7 +24,7 @@ App-Device-Id: "{{ device_id }}"
 > {% client.log(response.body.access_token); client.global.set('token', response.body.access_token) %}
 
 ### Verify account
-POST http://localhost/api/auth/verify
+POST http://localhost:8088/api/auth/verify
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{ token }}
@@ -33,7 +33,7 @@ App-Device-Id: "{{ device_id }}"
 { "email": "{{ email }}", "code": "1ffd" }
 
 ### Login
-POST http://localhost/api/auth/login
+POST http://localhost:8088/api/auth/login
 Accept: application/json
 Content-Type: application/json
 App-Device-Id: "{{ device_id }}"
@@ -55,14 +55,14 @@ App-Device-Id: "{{ device_id }}"
 > {%  client.log(response.body.access_token); client.global.set('token', response.body.access_token); %}
 
 ### Get me
-GET http://localhost/api/auth/me
+GET http://localhost:8088/api/auth/me
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{ token }}
 App-Device-Id: "{{ device_id }}"
 
 ### Reset password
-POST http://localhost/api/auth/login
+POST http://localhost:8088/api/auth/login
 Accept: application/json
 Content-Type: application/json
 App-Device-Id: "{{ device_id }}"
@@ -70,7 +70,7 @@ App-Device-Id: "{{ device_id }}"
 { "email": "{{ email }}" }
 
 ### Set new password
-POST http://localhost/api/auth/login
+POST http://localhost:8088/api/auth/login
 Accept: application/json
 Content-Type: application/json
 App-Device-Id: "{{ device_id }}"
@@ -83,7 +83,21 @@ App-Device-Id: "{{ device_id }}"
 }
 
 ### Get collections
-GET http://localhost/api/collections
+GET http://localhost:8088/api/collections
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+App-Device-Id: "{{ device_id }}"
+
+### Get schedules
+GET http://localhost:8088/api/schedules
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{ token }}
+App-Device-Id: "{{ device_id }}"
+
+### Get schedule
+GET http://localhost:8088/api/schedules/1
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{ token }}

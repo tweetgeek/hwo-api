@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Database\Factories\UserGarbageCollectionFactory;
+use Database\Factories\GarbageCollectionFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UserGarbageCollection extends Model
+class GarbageCollection extends Model
 {
     use HasFactory;
 
@@ -27,13 +27,13 @@ class UserGarbageCollection extends Model
         return $this->belongsTo(GarbageType::class);
     }
 
-    public function userGarbageSchedule(): BelongsTo
+    public function garbageSchedule(): BelongsTo
     {
-        return $this->belongsTo(UserGarbageSchedule::class);
+        return $this->belongsTo(GarbageSchedule::class);
     }
 
     protected static function newFactory(): Factory
     {
-        return UserGarbageCollectionFactory::new();
+        return GarbageCollectionFactory::new();
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\GarbageSchedulePostRequest;
+use App\Repositories\GarbageCollectionRepository;
+use App\Repositories\GarbageScheduleRepository;
 use App\Repositories\PlaceRepository;
-use App\Repositories\UserGarbageCollectionRepository;
-use App\Repositories\UserGarbageScheduleRepository;
 use DB;
 use Illuminate\Http\JsonResponse;
 use Request;
@@ -13,9 +13,9 @@ use Request;
 class GarbageScheduleController extends ApiController
 {
     public function __construct(
-        protected readonly UserGarbageScheduleRepository   $garbageScheduleRepository,
-        protected readonly PlaceRepository                 $placeRepository,
-        protected readonly UserGarbageCollectionRepository $userGarbageCollectionRepository,
+        protected readonly GarbageScheduleRepository   $garbageScheduleRepository,
+        protected readonly PlaceRepository             $placeRepository,
+        protected readonly GarbageCollectionRepository $userGarbageCollectionRepository,
     ) {
     }
 

@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class () extends Migration {
     public function up()
     {
-        Schema::create('garbage_types', function (Blueprint $table) {
+        Schema::create('garbage_types', static function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable(false);
             $table->string('icon')->nullable();
             $table->string('color')->nullable();
-            $table->boolean('primary')->nullable();
+            $table->boolean('primary')->default(false);
             $table->timestamps();
         });
     }

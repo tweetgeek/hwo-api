@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class () extends Migration {
     public function up(): void
     {
-        Schema::create('places', function (Blueprint $table) {
+        Schema::create('places', static function (Blueprint $table) {
             $table->string('id')->unique();
             $table->string('name');
             $table->softDeletes();

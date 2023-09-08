@@ -2,14 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\Team;
+use App\Enums\UserRole;
 use App\Models\User;
-use App\Models\UserGarbageSchedule;
 use App\Models\UserNotificationSetting;
 use App\Models\UserOnboarding;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Laravel\Jetstream\Features;
 
 class UserFactory extends Factory
 {
@@ -79,13 +77,17 @@ class UserFactory extends Factory
             ->has(UserNotificationSetting::factory());
     }
 
-    public function withSchedule()
+    public function asUser(): UserFactory
     {
-        return $this->has(UserGarbageSchedule::factory());
+        return $this->afterMaking(function (User $user) {
+            $user->assignRole(UserRole::USER->value);
+        });
     }
 
-    public function withScheduleWithCollections()
+    public function asSuperAdmin(): UserFactory
     {
-        return $this->has(UserGarbageSchedule::factory()->withCollections()->withNextCollections());
+        return $this->afterMaking(function (User $user) {
+            $user->assignRole(UserRole::SUPER_ADMIN->value);
+        });
     }
 }

@@ -11,3 +11,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use App\Http\Controllers\HomeController;
+
+Route::get('/', [HomeController::class, 'index']);

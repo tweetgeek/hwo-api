@@ -4,8 +4,8 @@ namespace App\Notifications;
 
 use App\Broadcasting\ExpoChannel;
 use App\Broadcasting\ExpoMessage;
+use App\Models\GarbageCollection;
 use App\Models\User;
-use App\Models\UserGarbageCollection;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Channels\DatabaseChannel;
@@ -22,7 +22,7 @@ class SendUserCollectionNotification extends Notification implements ShouldQueue
 
     public function __construct(private readonly Collection $collections)
     {
-        $this->collectionsList = $collections->map(function (UserGarbageCollection $collection) {
+        $this->collectionsList = $collections->map(function (GarbageCollection $collection) {
             return $collection->garbageType->name;
         })->unique()->join(', ');
     }
@@ -45,7 +45,7 @@ class SendUserCollectionNotification extends Notification implements ShouldQueue
         $message = (new MailMessage())
             ->subject('Harmonogram Wywozu Odpadów przypomina');
 
-        $this->collections->unique('garbageType.name')->each(function (UserGarbageCollection $collection) use ($message) {
+        $this->collections->unique('garbageType.name')->each(function (GarbageCollection $collection) use ($message) {
             $message->line("[{$collection->garbageType->icon}] {$collection->garbageType->name}");
         });
 

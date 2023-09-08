@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Events\OnboardingCreatedEvent;
 use App\Listeners\CreateUserSettingsAfterOnboarding;
-use App\Models\UserGarbageSchedule;
-use App\Observers\UserGarbageScheduleObserver;
+use App\Models\GarbageSchedule;
+use App\Observers\GarbageScheduleObserver;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -29,7 +29,7 @@ class EventServiceProvider extends ServiceProvider
         ]
     ];
     protected $observers = [
-        UserGarbageSchedule::class => [UserGarbageScheduleObserver::class],
+        GarbageSchedule::class => [GarbageScheduleObserver::class],
     ];
 
     /**

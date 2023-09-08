@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\UserNotificationSettingsController;
 use App\Http\Controllers\Api\UserOnboardingController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'api', 'prefix' => 'auth'], function () {
+Route::group(['middleware' => 'api', 'prefix' => 'auth'], static function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
@@ -52,7 +52,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/device', [UserDeviceController::class, 'post']);
 
 
-    Route::group(['prefix' => 'auth'], function () {
+    Route::group(['prefix' => 'auth'], static function () {
         Route::post('verify', [AuthController::class, 'verify']);
     });
 });

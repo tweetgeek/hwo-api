@@ -27,12 +27,12 @@ class DeviceDto
             DeviceType::from($request['type']),
             $request['deviceId'],
             auth()->user()->id,
-            $request['isDevice'],
-            $request['deviceType'],
-            $request['modelName'],
-            $request['osName'],
-            $request['osVersion'],
-            $request['pushToken'],
+            $request['isDevice'] ?? null,
+            $request['deviceType'] ?? null,
+            $request['modelName'] ?? null,
+            $request['osName'] ?? null,
+            $request['osVersion'] ?? null,
+            $request['pushToken'] ?? null,
             Carbon::now()
         );
     }

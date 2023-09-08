@@ -2,16 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Models\GarbageCollection;
 use App\Models\GarbageType;
-use App\Models\UserGarbageCollection;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<UserGarbageCollection>
+ * @extends Factory<GarbageCollection>
  */
-class UserGarbageCollectionFactory extends Factory
+class GarbageCollectionFactory extends Factory
 {
-    protected $model = UserGarbageCollection::class;
+    protected $model = GarbageCollection::class;
 
     /**
      * Define the model's default state.

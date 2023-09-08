@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\UserGarbageCollectionRepository;
+use App\Repositories\GarbageCollectionRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GarbageCollectionController extends ApiController
 {
-    public function __construct(protected readonly UserGarbageCollectionRepository $userGarbageCollectionRepository)
+    public function __construct(protected readonly GarbageCollectionRepository $userGarbageCollectionRepository)
     {
     }
 
